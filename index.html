@@ -5,6 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        body{ animation: animateSectionBackground 50s infinite;}
+        h1,hr{ animation: animateSectionBackgroundclr 50s infinite;}
+        @keyframes animateSectionBackground {
+            00%, 11% { background-image: url(background.jpg); }
+            12%, 24% { background-image: url(background2.jpg); }
+            25%, 36% { background-image: url(background3.jpg); }
+            37%, 49% { background-image: url(background4.jpg); }
+            50%, 61% { background-image: url(background.jpg); }
+            62%, 74% { background-image: url(background2.jpg); }
+            75%, 86% { background-image: url(background3.jpg); }
+            87%, 99% { background-image: url(background4.jpg); }
+        }
+        @keyframes animateSectionBackgroundclr {
+            00%, 11% {color: #ffffff;}
+            12%, 24% {color: #000000;}
+            25%, 36% {color: #ffffff;}
+            37%, 49% {color: #ffffff;}
+            50%, 61% {color: #ffffff;}
+            62%, 74% {color: #000000;}
+            75%, 86% {color: #ffffff;}
+            87%, 99% {color: #ffffff;}
+        }
         body {
             background-image: url('background.jpg');
             background-repeat: no-repeat;
@@ -16,12 +38,39 @@
             font-family: "Raleway";
             font-size: 50px;
             color: #ffffff;
+            top: 50%;
             position:relative;
             animation:animatetop 2s;
         }
-        @keyframes animatetop{from{top:-300px;opacity:0} to{top:-30%;opacity:1}}
-        @keyframes widen{from{width:0%} to{width:100%}}
-        
+        @keyframes animatetop{from{top:-300px;opacity:0} to{top:0%;opacity:1}}
+        @keyframes animatetofp{from{top:-300px;opacity:0} to{top:500%;opacity:1}}
+        @keyframes widen {
+            00%{width:0%}
+            100%{width: 50%;}
+        }
+        @keyframes widenf{
+            00%{top:0%;width:0%;}
+            100%{top: 50%;width: 50%;}
+        }
+        hr {
+            border: none;
+            border-top: 3px double #333;
+            color: #333;
+            overflow: visible;
+            text-align: center;
+            height: 5px;
+            width: 50%;
+        }
+        p{
+            position:relative;
+        }
+        iframe {
+            animation:widen 2s;
+            height: 500px;
+            width: 50%;
+            
+            
+        }
         div {
             margin: 0;
             position: absolute;
@@ -35,9 +84,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div style="text-align: center;">
-        <h1>hi there mister</h1>
-        <hr class="w3-border-white" style="margin:auto;animation:widen 2s;">
-    </div>
+    <h1>Thanks for joining our server!</h1>
+    <hr class="w3-border-white" style="margin:auto;animation:animatetop 2s;animation:widenf 2s;">
 </body>
 </html>
