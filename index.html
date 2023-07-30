@@ -4,8 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            background-image: url('background.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            text-align: center;
+        }
+        h1 {
+            font-family: "Raleway";
+            font-size: 50px;
+            color: #ffffff;
+            position:relative;
+            animation:animatetop 2s;
+        }
+        @keyframes animatetop{from{top:-300px;opacity:0} to{top:-30%;opacity:1}}
+        @keyframes widen{from{width:0%} to{width:100%}}
+        
+        div {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
+    <div style="text-align: center;">
+        <h1>hi there mister</h1>
+        <hr class="w3-border-white" style="margin:auto;animation:widen 2s;">
+    </div>
 </body>
 </html>
