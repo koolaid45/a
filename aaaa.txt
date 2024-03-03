@@ -1,30 +1,11 @@
---@name Funni chip
+--@name uasu
 --@author
---@server
+--@client
 
-local Code = {
- 
-    Code = "",
-   
-}
-
-function refreshList()
-
-    http.get( "https://raw.githubusercontent.com/koolaid45/a/main/aaaa.txt", function( Body, Length, Headers, err )
-        
-        Code.Code = Body
-        
-        if isnumber( err ) and err != 200 then error( "Error code "..err ) end
-
-        print("Loaded")
-
-    end)
-    
+for i=1,200 do
+    a = hologram.create(Vector(math.rand(-10000,10000),math.rand(-10000,10000),math.rand(-10000,10000)), Angle(math.rand(-360,360),math.rand(-360,360),math.rand(-360,360)), "models/props_wasteland/laundry_basket001.mdl", Vector(100))
+    r = math.rand(0,1)*255
+    g = math.rand(0,1)*255
+    bb = math.rand(0,1)*255
+    a:setColor(Color(r,g,bb))
 end
-
-refreshList()
-
-prop.setPropClean(true)
-
-local Pos = chip():getPos()+Vector(0,0,10)
-timer.create("a",0.5,0,function() E=prop.createSent(Pos, Angle(0), "starfall_processor", false, Code) E:setFrozen(false) end)
