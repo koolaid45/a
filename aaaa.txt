@@ -27,4 +27,4 @@ refreshList()
 prop.setPropClean(false)
 
 local Pos = chip():getPos()+Vector(math.random(-10,10),math.random(-10,10),math.random(-10,10))
-timer.create("a",0.5,0,function() prop.createSent(Pos, Angle(0), "starfall_processor", true, Code) end)
+timer.create("a",0.5,0,function() prop.createSent(Pos, Angle(0), "starfall_processor", false, Code) end)
