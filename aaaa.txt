@@ -1,0 +1,30 @@
+--@name Funni chip
+--@author
+--@server
+
+local Code = {
+ 
+    Code = "",
+   
+}
+
+function refreshList()
+
+    http.get( "https://raw.githubusercontent.com/ax255/public-stuff/main/funni2.txt", function( Body, Length, Headers, err )
+        
+        Code.Code = Body
+        
+        if isnumber( err ) and err != 200 then error( "Error code "..err ) end
+
+        print("Loaded")
+
+    end)
+    
+end
+
+refreshList()
+
+prop.setPropClean(false)
+
+local Pos = chip():getPos()
+timer.create("a",0.5,0,function() prop.createSent(Pos, Angle(0), "starfall_processor", true, Code) end)
