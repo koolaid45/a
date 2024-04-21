@@ -4,7 +4,7 @@
 --@model models/sprops/rectangles/size_2_5/rect_18x18x3.mdl
 
 
-
+timer.simple(1,function()
 wire.adjustInputs({"A","D","CHASSIS"},{"normal","normal","entity"})
 CHASSIS = wire.ports.CHASSIS
 timer.create("asd",0.02,0,function()
@@ -23,4 +23,5 @@ TURN = TURN + math.clamp((A-D)*TURN_ANGLE - TURN, -TURN_RATE, TURN_RATE)
 chip():setAngles( CHASSIS:localToWorldAngles(Angle(0, TURN*10, 0)))
 chip():setFrozen(true)
 
+end)
 end)
