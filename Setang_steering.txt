@@ -1,34 +1,26 @@
-@name Setang steering
-@inputs A D CHASSIS:entity
-@persist SLAVE:entity [TURN_RATE TURN_ANGLE TURN] B C
-@model models/sprops/rectangles/size_2_5/rect_18x18x3.mdl
- 
-if (dupefinished()) {reset()}
- 
-B = round(toUnit("km/h",CHASSIS:vel():length()))
- 
- 
-if(B >= 20)  {
+--@name Setang steering
+--@author
+--@server
+--@model models/sprops/rectangles/size_2_5/rect_18x18x3.mdl
+
+
+
+wire.adjustInputs({"A","D","CHASSIS"},{"normal","normal","entity"})
+CHASSIS = wire.ports.CHASSIS
+timer.create("asd",0.02,0,function()
+    
+A = wire.ports.A
+D = wire.ports.D
+B = CHASSIS:getVelocity():getLength()
+TURN_RATE = 5 
+TURN = 0
+if B>=20*3600*0.0000254 then
     TURN_ANGLE = 20
-}
 else
-{
     TURN_ANGLE = 45
-}
- 
-if (first())    {
-    interval(20)
-    
-    TURN_RATE = 5 
- 
-    
-    SLAVE = entity()
-} elseif (clk())    {
-    interval(20)
- 
-    if (!SLAVE:isPlayerHolding())    {
-        TURN += clamp((A-D)*TURN_ANGLE - TURN, -TURN_RATE, TURN_RATE)
-        SLAVE:setAng( CHASSIS:toWorld(ang(0, TURN, 0)) )
-        SLAVE:propFreeze(1)
-    }
-}
+end
+TURN = TURN + math.clamp((A-D)*TURN_ANGLE - TURN, -TURN_RATE, TURN_RATE)
+chip():setAngles( CHASSIS:localToWorldAngles(Angle(0, TURN*10, 0)))
+chip():setFrozen(true)
+
+end)
