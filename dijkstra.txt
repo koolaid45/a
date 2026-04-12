@@ -1,0 +1,168 @@
+--@name dijkstra
+--@author
+--@client
+
+pathholos = {}
+set1={
+    Vertices={},
+    Holos={}
+}
+
+local Start = chip():getPos()+Vector(0,0,5)
+local Target = find.byModel("models/props_phx/games/chess/white_knight.mdl")[1]:getPos()+Vector(0,0,5)
+
+
+
+for i,v in pairs(find.byModel("models/props_phx/games/chess/white_pawn.mdl")) do
+    table.add(set1.Vertices,{v:getPos()+Vector(0,0,5)})
+end
+
+function closestVector(tbl,vec)
+    local ASD = 99999999
+    local closest = vec
+    
+    for i,v in pairs(tbl) do
+        if v:getDistance(vec)<ASD then
+            ASD = v:getDistance(vec)
+            closest = v
+        end
+    end
+    return closest
+end
+
+ClosestVectorToTargetIndex = table.keyFromValue(set1.Vertices, closestVector(set1.Vertices,Target))
+ClosestVectorToStartIndex = table.keyFromValue(set1.Vertices, closestVector(set1.Vertices,Start))
+
+print(ClosestVectorToStartIndex)
+
+function buildGraph(points, maxDist)
+    local graph = {}
+
+    for i = 1, #points do
+        graph[i] = {}
+
+        for j = 1, #points do
+            if i ~= j then
+                local dist = points[i]:getDistance(points[j])
+
+                if trace.line(points[i], points[j],table.add({chip(),find.byModel("models/props_phx/games/chess/white_knight.mdl")[1]},find.byModel("models/props_phx/games/chess/white_pawn.mdl"))).Hit == false then
+                    graph[i][j] = dist
+                end
+            end
+        end
+    end
+
+    return graph
+end
+local graph1 = buildGraph(set1.Vertices, 1000)
+
+function getPath(prev, target)
+    local path = {}
+
+    while target do
+        table.insert(path, 1, target)
+        target = prev[target]
+    end
+
+    return path
+end
+
+function Dijkstra(graph, source)
+    local dist = {}
+    local prev = {}
+    local Q = {}
+
+    for v, _ in pairs(graph) do
+        dist[v] = 99999999999
+        prev[v] = nil
+        table.insert(Q, v)
+    end
+
+    dist[source] = 0
+
+    while table.count(Q) > 0 do
+        local uIndex = 1
+        local u = Q[1]
+
+        for i = 2, #Q do
+            if dist[Q[i]] < dist[u] then
+                u = Q[i]
+                uIndex = i
+            end
+        end
+
+        table.remove(Q, uIndex)
+
+        for v, cost in pairs(graph[u]) do
+            local alt = dist[u] + cost
+
+            if alt < dist[v] then
+                dist[v] = alt
+                prev[v] = u
+            end
+        end
+    end
+
+    return dist, prev
+end
+
+function buildpath()
+    hologram.removeAll()
+    local dist, prev = Dijkstra(graph1, ClosestVectorToStartIndex)
+    local path = getPath(prev,ClosestVectorToTargetIndex)
+    local prevNode = nil
+    printTable(path)
+    for _, v in ipairs(path) do
+        if prevNode then
+            local p1 = set1.Vertices[prevNode]
+            local p2 = set1.Vertices[v]
+    
+            pathholos[#pathholos + 1] = hologram.create(
+                (p1 + p2) / 2,
+                (p2 - p1):getAngle(),
+                "models/sprops/cuboids/height06/size_1/cube_6x6x6.mdl",
+                Vector(p1:getDistance(p2) / 6, 5, 5)
+            ):setColor(Color(255,0,0))
+            
+            print(i)
+        else
+            local p1 = Start
+            local p2 = set1.Vertices[v]
+    
+            pathholos[#pathholos + 1] = hologram.create(
+                (p1 + p2) / 2,
+                (p2 - p1):getAngle(),
+                "models/sprops/cuboids/height06/size_1/cube_6x6x6.mdl",
+                Vector(p1:getDistance(p2) / 6, 5, 5)
+            ):setColor(Color(255,0,0))
+        end
+        local p1 = set1.Vertices[path[#path]]
+        local p2 = Target
+    
+        pathholos[#pathholos + 1] = hologram.create(
+            (p1 + p2) / 2,
+            (p2 - p1):getAngle(),
+            "models/sprops/cuboids/height06/size_1/cube_6x6x6.mdl",
+            Vector(p1:getDistance(p2) / 6, 5, 5)
+        ):setColor(Color(255,0,0))
+        prevNode = v
+    end
+end
+
+buildpath()
+
+hook.add("PlayerChat", "", function(ply, text, team, isdead)
+    if text == ".start" then
+        printTable(pathholos)
+        Start = owner():getPos()+Vector(0,0,5)
+        ClosestVectorToStartIndex = table.keyFromValue(set1.Vertices, closestVector(set1.Vertices,Start))
+        buildpath()
+    end
+    if text == ".target" then
+        Target = owner():getPos()+Vector(0,0,5)
+        ClosestVectorToTargetIndex = table.keyFromValue(set1.Vertices, closestVector(set1.Vertices,Target))
+        buildpath()
+    end
+end)
+
+
